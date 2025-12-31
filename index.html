@@ -9,55 +9,56 @@
 <body>
 
     <nav>
-        <h2>鄒卓樂</h2> <ul>
+        <h2>鄒卓樂</h2> 
+        <ul>
             <li><a href="#about">About</a></li>
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
-<header id="hero">
-    
-    <video autoplay muted loop playsinline class="bg-video">
-        <source src="images/jump.mp4" type="video/mp4">
-        您的瀏覽器不支援影片標籤。
-    </video>
+    <header id="hero">
+        <video autoplay muted loop playsinline class="bg-video" poster="images/hero.jpg">
+            <source src="images/jump.mp4" type="video/mp4">
+            您的瀏覽器不支援影片標籤。
+        </video>
 
-    <div class="hero-content">
-        <h1>HELLO, I am Your Father.</h1>
-        <p>往下滑動探索</p>
-    </div>
-
-</header>
-
-<section id="about">
-    <div class="about-container">
-        <div class="about-image">
-            <video muted loop playsinline class="smart-video"> 
-            <source src="images/profile.mp4" type="video/mp4">
-            </video>
+        <div class="hero-content">
+            <h1>HELLO, I am Your Father.</h1>
+            <p>往下滑動探索</p>
         </div>
+    </header>
 
-        <div class="about-text">
-            <h3>關於我</h3>
-            <p>早晨，我叫鄒卓樂，今年21歲還是A0，地獄火俱樂部成員，就讀我的英雄學院A班。</p>
-            <p>個性：行走避孕套，英雄名:大魔法師magicomdom。</p>
-            
+    <section id="about">
+        <div class="about-container">
+            <div class="about-image">
+                <video muted loop playsinline class="smart-video" poster="images/profile.jpg"> 
+                    <source src="images/profile.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="about-text">
+                <h3>關於我</h3>
+                <p>早晨，我叫鄒卓樂，今年21歲還是A0，地獄火俱樂部成員，就讀我的英雄學院A班。</p>
+                <p>個性：行走避孕套，英雄名:大魔法師magicomdom。</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-    <section id="gallery">. 
+    <section id="gallery">
         <h3>My Gallery</h3>
         <div class="gallery-grid">
             <img src="images/p1.jpg" alt="作品1">
             <img src="images/p2.HEIC" alt="作品2">
-            <video muted loop playsinline class="smart-video">
+            
+            <video muted loop playsinline class="smart-video" poster="images/p3.jpg">
                 <source src="images/p3.mp4" type="video/mp4">
             </video>
+            
             <img src="images/p4.JPG" alt="作品4">
             <img src="images/p5.jpg" alt="作品5">
-            <video muted loop playsinline class="smart-video">
+            
+            <video muted loop playsinline class="smart-video" poster="images/p6.jpg">
                 <source src="images/p6.mp4" type="video/mp4">
             </video>
         </div>
@@ -71,41 +72,31 @@
 
     <script>
         /* =========================================
-        新版邏輯：區分電腦與手機的播放行為
-        ========================================= */
-        
-        // 1. 抓出所有貼有 "smart-video" 標籤的影片
+           功能一：區分電腦與手機的播放行為
+           ========================================= */
         const videos = document.querySelectorAll('.smart-video');
-
-        // 2. 判斷現在是不是手機 (螢幕寬度小於 768px)
-        const isMobile = window.innerWidth < 768;
+        const isMobile = window.innerWidth < 768; // 判斷是否為手機
 
         videos.forEach(video => {
             if (isMobile) {
-                // ---【手機版邏輯】---
-                // 直接播放，不用等
+                // ---【手機版】自動播放 ---
                 video.play().catch(error => {
-                    // 某些手機如果開了省電模式，可能會擋自動播放，這裡防止報錯
-                    console.log("Auto-play was prevented by browser");
+                    console.log("Auto-play prevented by browser (Low Power Mode likely)");
                 });
-
             } else {
-                // ---【電腦版邏輯】---
-                // 保持原本的互動：移入播放，移出暫停
+                // ---【電腦版】滑鼠互動 ---
                 video.addEventListener('mouseenter', () => {
                     video.play();
                 });
-
                 video.addEventListener('mouseleave', () => {
                     video.pause();
-                    // video.currentTime = 0; // 如果想要移開後重頭播，可以把這行打開
                 });
             }
         });
 
         /* =========================================
-        Hero 區塊捲動淡出效果 (保留不動)
-        ========================================= */
+           功能二：Hero 區塊捲動淡出效果
+           ========================================= */
         const heroSection = document.getElementById('hero');
         window.addEventListener('scroll', function() {
             const scrollPosition = window.scrollY;
