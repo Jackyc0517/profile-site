@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>樂樂的個人網站</title>
+</head>
+<body>
+
+    <nav>
+        <h2>鄒卓樂</h2> <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+<header id="hero">
+    
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="images/jump.mp4" type="video/mp4">
+        您的瀏覽器不支援影片標籤。
+    </video>
+
+    <div class="hero-content">
+        <h1>HELLO, I am Your Father.</h1>
+        <p>往下滑動探索</p>
+    </div>
+
+</header>
+
+<section id="about">
+    <div class="about-container">
+        <div class="about-image">
+            <video muted loop playsinline class="smart-video">
+            <source src="images/profile.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="about-text">
+            <h3>關於我</h3>
+            <p>早晨，我叫鄒卓樂，今年21歲還是A0，地獄火俱樂部成員。</p>
+        </div>
+    </div>
+</section>
+
+    <section id="gallery">. 
+        <h3>My Gallery</h3>
+        <div class="gallery-grid">
+            <img src="images/p1.jpg" alt="作品1">
+            <img src="images/p2.HEIC" alt="作品2">
+            <video muted loop playsinline class="smart-video">
+                <source src="images/p3.mp4" type="video/mp4">
+            </video>
+            <img src="images/p4.JPG" alt="作品4">
+            <img src="images/p5.jpg" alt="作品5">
+            <video muted loop playsinline class="smart-video">
+                <source src="images/p6.mp4" type="video/mp4">
+            </video>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <h3>Contact</h3>
+        <p>Jacky05@Jacky05.win</p>
+        <p>© 2025 Jacky05</p>
+    </footer>
+
+   <script>
+        /* =========================================
+           功能一：原本的滑鼠移入播放功能 (保留不動)
+           ========================================= */
+        const videos = document.querySelectorAll('.smart-video');
+        videos.forEach(video => {
+            video.addEventListener('mouseenter', () => {
+                video.play();
+            });
+            video.addEventListener('mouseleave', () => {
+                video.pause();
+            });
+        });
+
+        /* =========================================
+           功能二：新增的 Hero 捲動淡出效果
+           ========================================= */
+        // 1. 抓到 Hero 區塊
+        const heroSection = document.getElementById('hero');
+
+        // 2. 監聽視窗的「捲動 (scroll)」事件
+        window.addEventListener('scroll', function() {
+            
+            // 取得目前視窗往下捲了多少距離
+            const scrollPosition = window.scrollY;
+            
+            // 取得 Hero 區塊的總高度
+            const heroHeight = heroSection.offsetHeight;
+
+            // 3. 計算透明度 (公式：1 減去 已捲動的比例)
+            // 捲得越多，數值越小 (從 1 變成 0)
+            let opacityValue = 1 - (scrollPosition / heroHeight);
+
+            // 為了保險起見，確保透明度不會小於 0 (完全透明)
+            if (opacityValue < 0) {
+                opacityValue = 0;
+            }
+
+            // 4. 把計算出來的透明度套用到 Hero 區塊上
+            heroSection.style.opacity = opacityValue;
+        });
+    </script>
+</body>
+</body>
+</html>
