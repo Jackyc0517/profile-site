@@ -76,42 +76,52 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            // 1. 判斷是否為手機 (螢幕寬度小於 768px)
-            const isMobile = window.innerWidth < 768;
+            /* =========================================
+               🔥 1. Hero 影片專屬喚醒機制 (修復停止播放問題)
+               ========================================= */
+            const heroVideo = document.querySelector('.bg-video');
             
-            // 2. 抓取所有目標 (影片 + 圖片)
+            if (heroVideo) {
+                // 建立一個專門監視 Hero 影片的觀察者
+                const heroObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        // 如果 Hero 影片出現在畫面中 (哪怕只露出一點點)
+                        if (entry.isIntersecting) {
+                            entry.target.play().catch(e => console.log("Hero autoplay handled"));
+                        } else {
+                            // 離開畫面時暫停 (省電)
+                            entry.target.pause();
+                        }
+                    });
+                });
+                // 開始監視
+                heroObserver.observe(heroVideo);
+            }
+
+            /* =========================================
+               📱 2. Gallery 內容的互動邏輯
+               ========================================= */
+            const isMobile = window.innerWidth < 768;
             const allMedia = document.querySelectorAll('.smart-video, .gallery-grid img');
 
             if (isMobile) {
-                /* =================================
-                📱 手機版邏輯：捲動觸發 (Scroll Trigger)
-                ================================= */
-                
-                // 設定監視器：當物件進入螢幕 50% (threshold: 0.5) 時觸發
+                // --- 手機版：捲動觸發特效 ---
                 const observerOptions = {
                     root: null,
                     rootMargin: '0px',
                     threshold: 0.5 
                 };
 
-                const observer = new IntersectionObserver((entries) => {
+                const galleryObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         const target = entry.target;
-
                         if (entry.isIntersecting) {
-                            // A. 進入視線範圍 -> 變身！(變彩色、放大)
                             target.classList.add('in-view');
-                            
-                            // 如果是影片，就播放
                             if (target.tagName === 'VIDEO') {
-                                target.play().catch(e => console.log("Autoplay prevented"));
+                                target.play().catch(e => console.log("Gallery autoplay prevented"));
                             }
-
                         } else {
-                            // B. 離開視線範圍 -> 變回原形 (黑白)
                             target.classList.remove('in-view');
-                            
-                            // 如果是影片，就暫停
                             if (target.tagName === 'VIDEO') {
                                 target.pause();
                             }
@@ -119,30 +129,32 @@
                     });
                 }, observerOptions);
 
-                // 開始監視所有圖片和影片
                 allMedia.forEach(media => {
-                    observer.observe(media);
+                    galleryObserver.observe(media);
                 });
 
             } else {
-                /* =================================
-                💻 電腦版邏輯：滑鼠互動 (Hover)
-                ================================= */
-                // 只針對影片做播放控制，圖片 CSS 已經處理好了
-                document.querySelectorAll('video').forEach(video => {
+                // --- 電腦版：滑鼠互動 ---
+                document.querySelectorAll('.smart-video').forEach(video => {
                     video.addEventListener('mouseenter', () => video.play());
                     video.addEventListener('mouseleave', () => video.pause());
                 });
             }
 
-            /* Hero 區塊捲動淡出效果 (通用) */
+            /* =========================================
+               ✨ 3. Hero 捲動淡出效果
+               ========================================= */
             const heroSection = document.getElementById('hero');
             if(heroSection){
                 window.addEventListener('scroll', function() {
                     const scrollPosition = window.scrollY;
                     const heroHeight = heroSection.offsetHeight;
+                    
+                    // 計算透明度
                     let opacityValue = 1 - (scrollPosition / heroHeight);
                     if (opacityValue < 0) opacityValue = 0;
+                    
+                    // 套用透明度 (這只會影響整個區塊的淡出，不會停止影片)
                     heroSection.style.opacity = opacityValue;
                 });
             }
