@@ -12,21 +12,18 @@ body {
 a { text-decoration: none; color: #000000; font-weight: bold; transition: 0.3s; }
 a:hover { color: #555; }
 
-/* --- 2. 導覽列 (預設電腦版：Fixed 固定在頂端) --- */
+/* --- 2. 導覽列 (電腦版：Fixed) --- */
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    
-    /* 電腦版維持固定，這樣才帥 */
     position: fixed; 
     width: 100%;
     top: 0;
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 1000;
 }
-
 nav ul { list-style: none; display: flex; gap: 30px; }
 
 /* --- 3. Hero 區塊 --- */
@@ -46,12 +43,17 @@ header#hero {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    object-fit: cover; 
-    z-index: 0;
+    object-fit: cover;
+    z-index: 0; /* 修正圖層問題 */
     opacity: 0.6;
 }
 
-.hero-content { position: relative; z-index: 1; text-align: center; }
+.hero-content { 
+    position: relative;
+    z-index: 1; /* 確保文字在影片上方 */
+    text-align: center; 
+}
+
 .hero-content h1 {
     font-size: 4rem; letter-spacing: 2px;
     margin-bottom: 20px; text-transform: uppercase;
@@ -62,13 +64,14 @@ header#hero {
 section#about { padding: 100px 50px; max-width: 1200px; margin: 0 auto; }
 .about-container { display: flex; align-items: center; gap: 50px; }
 
+/* 容器設定 overflow:hidden 以免放大時遮到隔壁文字 */
 .about-image { flex: 1; overflow: hidden; }
 
-/* 電腦版與手機版通用的影片設定 */
+/* 通用設定：預設黑白，有過渡動畫 */
 .about-image video {
     width: 100%; max-width: 400px; height: auto;
     filter: grayscale(100%);
-    transition: all 0.6s ease;
+    transition: all 0.6s ease; /* 讓放大變色過程很滑順 */
     object-fit: cover; display: block;
 }
 
@@ -97,6 +100,7 @@ section#gallery h3 { font-size: 2.5rem; margin-bottom: 50px; }
     max-width: 1200px; margin: 0 auto;
 }
 
+/* Gallery 圖片與影片通用設定 */
 .gallery-grid img, .gallery-grid video {
     width: 100%; height: 300px;
     object-fit: cover;
@@ -114,14 +118,13 @@ section#gallery h3 { font-size: 2.5rem; margin-bottom: 50px; }
 footer { padding: 50px; text-align: center; background-color: #000; color: #fff; }
 
 /* =========================================
-   📱 手機版專用設定 (乾淨修復版)
+   📱 手機版專用設定 (Mobile)
    ========================================= */
 @media (max-width: 768px) {
     
     /* 1. 導覽列：改為相對定位 (Relative) */
     nav {
-        /* 這樣它會佔據空間，把 Hero 往下推，不會蓋住內容 */
-        /* 且因為是 relative，往下滑動時它會自然捲上去消失 */
+        /* ✅ 關鍵修正：relative 會佔據空間，把 Hero 往下推，絕不重疊！ */
         position: relative !important; 
         flex-direction: column;
         padding: 20px 0;
@@ -134,24 +137,26 @@ footer { padding: 50px; text-align: center; background-color: #000; color: #fff;
 
     nav ul { margin-top: 15px; gap: 20px; }
 
-    /* 2. Hero 區塊調整 */
-    header#hero {
-        /* 因為 Nav 已經把上面空間佔走了，這裡不用額外設定 */
-    }
-    
+    /* 2. 排版修正 */
     header#hero h1 { font-size: 2rem; padding: 0 10px; }
-
-    /* 3. 關於我排版 (直向) */
     .about-container { flex-direction: column !important; padding: 0 20px; gap: 30px; }
     .about-text { text-align: left; width: 100%; }
-    
-    /* 4. Gallery 排版 (單欄) */
     .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; }
 
-    /* 5. 手機版特效：滑到才變色 */
+    /* 3. ✅ 手機版捲動特效 (Scroll Trigger Effect) */
+    /* 當 JS 加上 .in-view 時，這些樣式會生效 */
     .in-view {
-        filter: grayscale(0%) !important;
-        transform: scale(1.05) !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        filter: grayscale(0%) !important;  /* 變彩色 */
+        transform: scale(1.05) !important; /* 放大 */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* 加陰影 */
+        z-index: 10;
+    }
+    
+    /* 確保初始狀態是黑白且未放大 */
+    .about-image video,
+    .gallery-grid video,
+    .gallery-grid img {
+        filter: grayscale(100%);
+        transform: scale(1);
     }
 }
