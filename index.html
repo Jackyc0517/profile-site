@@ -76,7 +76,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            // 1. 判斷是否為手機
+            // 1. 判斷是否為手機 (螢幕寬度小於 768px)
             const isMobile = window.innerWidth < 768;
             
             // 2. 抓取所有目標 (影片 + 圖片)
@@ -99,7 +99,7 @@
                         const target = entry.target;
 
                         if (entry.isIntersecting) {
-                            // A. 進入視線範圍 -> 變身！
+                            // A. 進入視線範圍 -> 變身！(變彩色、放大)
                             target.classList.add('in-view');
                             
                             // 如果是影片，就播放
@@ -108,7 +108,7 @@
                             }
 
                         } else {
-                            // B. 離開視線範圍 -> 變回原形
+                            // B. 離開視線範圍 -> 變回原形 (黑白)
                             target.classList.remove('in-view');
                             
                             // 如果是影片，就暫停
