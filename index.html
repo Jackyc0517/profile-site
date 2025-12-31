@@ -71,39 +71,78 @@
     </footer>
 
     <script>
-        /* =========================================
-           功能一：區分電腦與手機的播放行為
-           ========================================= */
-        const videos = document.querySelectorAll('.smart-video');
-        const isMobile = window.innerWidth < 768; // 判斷是否為手機
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // 1. 判斷是否為手機
+            const isMobile = window.innerWidth < 768;
+            
+            // 2. 抓取所有目標 (影片 + 圖片)
+            const allMedia = document.querySelectorAll('.smart-video, .gallery-grid img');
 
-        videos.forEach(video => {
             if (isMobile) {
-                // ---【手機版】自動播放 ---
-                video.play().catch(error => {
-                    console.log("Auto-play prevented by browser (Low Power Mode likely)");
+                /* =================================
+                📱 手機版邏輯：捲動觸發 (Scroll Trigger)
+                ================================= */
+                
+                // 設定監視器：當物件進入螢幕 50% (threshold: 0.5) 時觸發
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.5 
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const target = entry.target;
+
+                        if (entry.isIntersecting) {
+                            // A. 進入視線範圍 -> 變身！
+                            target.classList.add('in-view');
+                            
+                            // 如果是影片，就播放
+                            if (target.tagName === 'VIDEO') {
+                                target.play().catch(e => console.log("Autoplay prevented"));
+                            }
+
+                        } else {
+                            // B. 離開視線範圍 -> 變回原形
+                            target.classList.remove('in-view');
+                            
+                            // 如果是影片，就暫停
+                            if (target.tagName === 'VIDEO') {
+                                target.pause();
+                            }
+                        }
+                    });
+                }, observerOptions);
+
+                // 開始監視所有圖片和影片
+                allMedia.forEach(media => {
+                    observer.observe(media);
                 });
+
             } else {
-                // ---【電腦版】滑鼠互動 ---
-                video.addEventListener('mouseenter', () => {
-                    video.play();
-                });
-                video.addEventListener('mouseleave', () => {
-                    video.pause();
+                /* =================================
+                💻 電腦版邏輯：滑鼠互動 (Hover)
+                ================================= */
+                // 只針對影片做播放控制，圖片 CSS 已經處理好了
+                document.querySelectorAll('video').forEach(video => {
+                    video.addEventListener('mouseenter', () => video.play());
+                    video.addEventListener('mouseleave', () => video.pause());
                 });
             }
-        });
 
-        /* =========================================
-           功能二：Hero 區塊捲動淡出效果
-           ========================================= */
-        const heroSection = document.getElementById('hero');
-        window.addEventListener('scroll', function() {
-            const scrollPosition = window.scrollY;
-            const heroHeight = heroSection.offsetHeight;
-            let opacityValue = 1 - (scrollPosition / heroHeight);
-            if (opacityValue < 0) opacityValue = 0;
-            heroSection.style.opacity = opacityValue;
+            /* Hero 區塊捲動淡出效果 (通用) */
+            const heroSection = document.getElementById('hero');
+            if(heroSection){
+                window.addEventListener('scroll', function() {
+                    const scrollPosition = window.scrollY;
+                    const heroHeight = heroSection.offsetHeight;
+                    let opacityValue = 1 - (scrollPosition / heroHeight);
+                    if (opacityValue < 0) opacityValue = 0;
+                    heroSection.style.opacity = opacityValue;
+                });
+            }
         });
     </script>
 </body>

@@ -1,48 +1,33 @@
-/* --- 1. 全域設定 (Global Styles) --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* --- 1. 全域設定 --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
     background-color: #ffffff;
     color: #000000;
     line-height: 1.6;
+    overflow-x: hidden; /* 防止水平捲軸出現 */
 }
 
-a {
-    text-decoration: none;
-    color: #000000;
-    font-weight: bold;
-    transition: 0.3s;
-}
+a { text-decoration: none; color: #000000; font-weight: bold; transition: 0.3s; }
+a:hover { color: #555; }
 
-a:hover {
-    color: #555;
-}
-
-/* --- 2. 導覽列 (Navigation) --- */
+/* --- 2. 導覽列 (電腦版) --- */
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    position: fixed; /* 電腦版：固定在頂端 */
+    position: fixed; /* 電腦版固定 */
     width: 100%;
     top: 0;
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 1000;
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
+nav ul { list-style: none; display: flex; gap: 30px; }
 
-/* --- 3. 英雄區塊 (Hero Section) --- */
+/* --- 3. Hero 區塊 --- */
 header#hero {
     height: 100vh;
     width: 100%;
@@ -52,180 +37,114 @@ header#hero {
     align-items: center;
     overflow: hidden;
     color: white;
+    background-color: #000; /* 預防影片沒跑出來時變白底 */
 }
 
 .bg-video {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     object-fit: cover;
     z-index: -1;
     opacity: 0.6;
 }
 
-.hero-content {
-    z-index: 1;
-    text-align: center;
-}
-
+.hero-content { z-index: 1; text-align: center; }
 .hero-content h1 {
-    font-size: 4rem;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
+    font-size: 4rem; letter-spacing: 2px;
+    margin-bottom: 20px; text-transform: uppercase;
     text-shadow: 2px 2px 20px rgba(0,0,0,0.8);
 }
 
-/* --- 4. 關於我 (About) --- */
-section#about {
-    padding: 100px 50px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+/* --- 4. 關於我 --- */
+section#about { padding: 100px 50px; max-width: 1200px; margin: 0 auto; }
+.about-container { display: flex; align-items: center; gap: 50px; }
 
-.about-container {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-}
+.about-image { flex: 1; overflow: hidden; } /* 限制放大範圍 */
 
-/* 影片容器設定 (Zoom 效果不超出範圍) */
-.about-image {
-    flex: 1;
-    overflow: hidden; /* 關鍵：讓放大的影片不超出框框 */
-}
-
+/* 預設樣式 (電腦手機共用) */
 .about-image video {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    border-radius: 0;
-    filter: grayscale(100%); /* 電腦版預設黑白 */
-    transition: 0.5s;
-    object-fit: cover;
-    display: block;
+    width: 100%; max-width: 400px; height: auto;
+    filter: grayscale(100%); /* 預設黑白 */
+    transition: all 0.6s ease; /* 動畫速度 */
+    object-fit: cover; display: block;
 }
 
-.about-image video:hover {
-    filter: grayscale(0%);
-    transform: scale(1.1); /* 電腦版滑鼠移入放大 */
+/* 電腦版 Hover */
+@media (min-width: 769px) {
+    .about-image video:hover {
+        filter: grayscale(0%);
+        transform: scale(1.1);
+    }
 }
 
-.about-text {
-    flex: 1;
-}
-
+.about-text { flex: 1; }
 .about-text h3 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    border-left: 5px solid black;
-    padding-left: 15px;
+    font-size: 2rem; margin-bottom: 20px;
+    border-left: 5px solid black; padding-left: 15px;
 }
 
-/* --- 5. 照片藝廊 (Gallery) --- */
-section#gallery {
-    padding: 100px 50px;
-    background-color: #f9f9f9;
-    text-align: center;
-}
-
-section#gallery h3 {
-    font-size: 2.5rem;
-    margin-bottom: 50px;
-}
+/* --- 5. Gallery --- */
+section#gallery { padding: 100px 50px; background-color: #f9f9f9; text-align: center; }
+section#gallery h3 { font-size: 2.5rem; margin-bottom: 50px; }
 
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1200px; margin: 0 auto;
 }
 
-.gallery-grid img, 
-.gallery-grid video {
-    width: 100%;
-    height: 300px;
+.gallery-grid img, .gallery-grid video {
+    width: 100%; height: 300px;
     object-fit: cover;
-    filter: grayscale(100%);
-    transition: transform 0.3s;
+    filter: grayscale(100%); /* 預設黑白 */
+    transition: all 0.6s ease;
 }
 
-.gallery-grid img:hover, 
-.gallery-grid video:hover {
-    transform: scale(1.05);
-    filter: grayscale(0%);
-    z-index: 10;
+/* 電腦版 Hover */
+@media (min-width: 769px) {
+    .gallery-grid img:hover, .gallery-grid video:hover {
+        transform: scale(1.05); filter: grayscale(0%); z-index: 10;
+    }
 }
 
-/* --- 6. 頁尾 (Footer) --- */
-footer {
-    padding: 50px;
-    text-align: center;
-    background-color: #000;
-    color: #fff;
-}
+/* --- 6. Footer --- */
+footer { padding: 50px; text-align: center; background-color: #000; color: #fff; }
 
 /* =========================================
-   手機版專用修復 (Mobile Fix) - 寬度 < 768px
+   📱 手機版專用設定 (重要修復)
    ========================================= */
 @media (max-width: 768px) {
-
-    /* 1. 導覽列修復：改為相對定位，不遮擋內容 */
+    
+    /* 1. 導覽列修復：不再重疊！ */
     nav {
-        position: relative !important; /* 關鍵：不再懸浮 */
+        position: relative !important; /* 關鍵：改成相對定位 */
         flex-direction: column;
         padding: 20px 0;
         background-color: #ffffff !important;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 加點陰影 */
     }
 
-    nav ul {
-        margin-top: 15px;
-        gap: 20px;
-        padding: 0;
-    }
-    
-    /* 修正 Hero 標題太大的問題 */
-    header#hero h1 {
-        font-size: 2.5rem;
-        padding: 0 10px;
-    }
+    nav ul { margin-top: 15px; gap: 20px; }
 
-    /* 2. 關於我修復：改為直向堆疊 */
-    .about-container {
-        flex-direction: column !important; /* 強制直向 */
-        padding: 0 10px;
-        gap: 30px;
-    }
+    /* 2. Hero 調整 */
+    header#hero { height: 80vh; /* 手機不用太高 */ }
+    header#hero h1 { font-size: 2rem; padding: 0 10px; }
 
-    .about-image {
-        width: 100%;
-        max-width: 100%;
-    }
+    /* 3. 關於我排版 */
+    .about-container { flex-direction: column !important; padding: 0 20px; gap: 30px; }
+    .about-text { text-align: left; width: 100%; }
+    .about-image video { max-width: 100%; }
 
-    .about-image video {
-        max-width: 100%; /* 確保手機上寬度正常 */
-    }
+    /* 4. Gallery 手機排版 */
+    .gallery-grid { grid-template-columns: 1fr; /* 單欄 */ padding: 0 20px; }
 
-    .about-text {
-        width: 100%;
-        text-align: left;
-    }
-
-    /* 3. 手機版視覺優化：強制彩色，移除放大特效 */
-    .about-image video,
-    .gallery-grid video,
-    .gallery-grid img {
-        filter: grayscale(0%) !important; /* 總是彩色 */
-        transform: none !important;       /* 取消放大，避免手機版面亂掉 */
-    }
-
-    /* 4. 版面微調 */
-    section#about, 
-    section#gallery {
-        padding: 50px 20px;
+    /* ✨ 5. 焦點特效樣式 (Focus Effect) ✨ */
+    /* 當 JavaScript 加上 .in-view 這個 class 時，才變彩色+放大 */
+    .in-view {
+        filter: grayscale(0%) !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* 加點陰影更立體 */
     }
 }
