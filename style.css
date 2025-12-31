@@ -188,53 +188,57 @@ footer {
    手機版專用設定 (Mobile Styles)
    當螢幕寬度小於 768px (平板/手機) 時觸發
    ========================================= */
+/* =========================================
+   手機版專用修復 (Mobile Fix)
+   ========================================= */
 @media (max-width: 768px) {
 
-    /* 1. 導覽列：改成垂直排列，避免按鈕擠在一起 */
+    /* 1. 導覽列：變成垂直，且背景純白 */
     nav {
-        flex-direction: column; /* 變成直向 */
-        padding: 15px;
-        background-color: rgba(255, 255, 255, 1); /* 手機版背景不透明比較清楚 */
+        flex-direction: column;
+        padding: 10px 0;
+        background-color: #ffffff !important; /* 強制純白背景 */
+        position: relative; /* 改成不固定，避免遮住內容 */
     }
 
     nav ul {
-        margin-top: 15px;
+        margin-top: 10px;
         gap: 15px;
-        font-size: 0.9rem;
+        padding: 0;
     }
 
-    /* 2. Hero 區塊：字體縮小，避免手機上標題斷行太醜 */
-    header#hero h1 {
-        font-size: 2.5rem; /* 原本是 4rem，手機改小一點 */
-        line-height: 1.2;
-        padding: 0 10px; /* 左右留點空隙 */
-    }
-
-    /* 3. 關於我：把「左右排版」改成「上下堆疊」 */
+    /* 2. 關於我：強制直向排列 (解決文字被擠扁的問題) */
     .about-container {
-        flex-direction: column; /* 關鍵：變成直向堆疊 */
+        display: flex;
+        flex-direction: column !important; /* 加上 !important 強制執行 */
+        padding: 0 20px;
         gap: 30px;
     }
 
-    .about-image video {
-        max-width: 100%; /* 照片/影片佔滿手機寬度 */
-    }
-    
-    .about-text h3 {
-        margin-top: 0;
+    /* 3. 修正影片/圖片容器寬度 */
+    .about-image {
+        width: 100%;       /* 佔滿螢幕寬度 */
+        max-width: 100%;
+        height: auto;      /* 高度自動 */
+        margin-bottom: 20px;
     }
 
-    /* 4. 全域調整：減少兩側留白，手機寸土寸金 */
-    section#about, 
-    section#gallery {
-        padding: 60px 20px; /* 原本是 100px 50px，改小一點 */
+    /* 確保影片本身也是滿版 */
+    .about-image video {
+        width: 100%;
+        height: auto;
+        display: block;
     }
-    
-    /* 5. Gallery：手機上一行顯示 1 張或 2 張圖 */
-    .gallery-grid {
-        grid-template-columns: 1fr; /* 1fr 代表佔滿一行 (單欄模式) */
-        /* 如果你喜歡手機上一行兩張，可以用下面這行取代上面那行：
-        grid-template-columns: repeat(2, 1fr); 
-        */
+
+    /* 4. 文字內容放寬 */
+    .about-text {
+        width: 100%;
+        text-align: left; /* 或者 center 看你喜歡 */
+        padding: 0 10px;
+    }
+
+    /* 5. 隱藏 Hero 區塊的視差滾動 (手機上這特效常會有 bug) */
+    header#hero {
+        background-attachment: scroll; 
     }
 }
