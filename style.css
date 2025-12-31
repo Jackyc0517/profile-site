@@ -6,19 +6,21 @@ body {
     background-color: #ffffff;
     color: #000000;
     line-height: 1.6;
-    overflow-x: hidden; /* 防止水平捲軸出現 */
+    overflow-x: hidden;
 }
 
 a { text-decoration: none; color: #000000; font-weight: bold; transition: 0.3s; }
 a:hover { color: #555; }
 
-/* --- 2. 導覽列 (電腦版) --- */
+/* --- 2. 導覽列 (預設電腦版：Fixed 固定在頂端) --- */
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    position: fixed; /* 電腦版固定 */
+    
+    /* 電腦版維持固定，這樣才帥 */
+    position: fixed; 
     width: 100%;
     top: 0;
     background-color: rgba(255, 255, 255, 0.95);
@@ -37,7 +39,7 @@ header#hero {
     align-items: center;
     overflow: hidden;
     color: white;
-    background-color: #000; /* 預防影片沒跑出來時變白底 */
+    background-color: #000;
 }
 
 .bg-video {
@@ -60,13 +62,13 @@ header#hero {
 section#about { padding: 100px 50px; max-width: 1200px; margin: 0 auto; }
 .about-container { display: flex; align-items: center; gap: 50px; }
 
-.about-image { flex: 1; overflow: hidden; } /* 限制放大範圍 */
+.about-image { flex: 1; overflow: hidden; }
 
-/* 預設樣式 (電腦手機共用) */
+/* 電腦版與手機版通用的影片設定 */
 .about-image video {
     width: 100%; max-width: 400px; height: auto;
-    filter: grayscale(100%); /* 預設黑白 */
-    transition: all 0.6s ease; /* 動畫速度 */
+    filter: grayscale(100%);
+    transition: all 0.6s ease;
     object-fit: cover; display: block;
 }
 
@@ -98,7 +100,7 @@ section#gallery h3 { font-size: 2.5rem; margin-bottom: 50px; }
 .gallery-grid img, .gallery-grid video {
     width: 100%; height: 300px;
     object-fit: cover;
-    filter: grayscale(100%); /* 預設黑白 */
+    filter: grayscale(100%);
     transition: all 0.6s ease;
 }
 
@@ -109,42 +111,53 @@ section#gallery h3 { font-size: 2.5rem; margin-bottom: 50px; }
     }
 }
 
-/* --- 6. Footer --- */
 footer { padding: 50px; text-align: center; background-color: #000; color: #fff; }
 
 /* =========================================
-   📱 手機版專用設定 (重要修復)
+   📱 手機版專用設定 (乾淨修復版)
    ========================================= */
 @media (max-width: 768px) {
     
-    /* 1. 導覽列修復：不再重疊！ */
+    /* 1. 導覽列：不隨頁面移動 (Absolute) */
     nav {
-        position: relative !important; /* 關鍵：改成相對定位 */
+        /* 改成 absolute：它會乖乖待在頁面最頂端 */
+        /* 當你往下滑，它就會被捲上去消失，不會擋路 */
+        position: absolute !important; 
+        top: 0;
+        left: 0;
+        width: 100%;
+        
         flex-direction: column;
         padding: 20px 0;
         background-color: #ffffff !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 加點陰影 */
+        box-shadow: none; /* 既然不浮動了，陰影也可以拿掉，看起來更乾淨 */
     }
 
     nav ul { margin-top: 15px; gap: 20px; }
 
-    /* 2. Hero 調整 */
-    header#hero { height: 80vh; /* 手機不用太高 */ }
+    /* 2. Hero 區塊調整 */
+    header#hero {
+        /* 因為導覽列現在佔據了實體空間(absolute在頂端)，Hero 不需要特別避開，
+           但為了美觀，我們可以讓 Hero 保持原樣，導覽列會蓋在 Hero 最上面一點點，
+           或是我們乾脆讓導覽列變回 relative (相對定位) 把 Hero 往下推 */
+    }
+
+    /* 💡 這裡我改用 relative 最保險：導覽列變磚塊，把下面內容擠下去，完全不重疊 */
+    nav { position: relative !important; }
+    
     header#hero h1 { font-size: 2rem; padding: 0 10px; }
 
-    /* 3. 關於我排版 */
+    /* 3. 關於我排版 (直向) */
     .about-container { flex-direction: column !important; padding: 0 20px; gap: 30px; }
     .about-text { text-align: left; width: 100%; }
-    .about-image video { max-width: 100%; }
+    
+    /* 4. Gallery 排版 (單欄) */
+    .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; }
 
-    /* 4. Gallery 手機排版 */
-    .gallery-grid { grid-template-columns: 1fr; /* 單欄 */ padding: 0 20px; }
-
-    /* ✨ 5. 焦點特效樣式 (Focus Effect) ✨ */
-    /* 當 JavaScript 加上 .in-view 這個 class 時，才變彩色+放大 */
+    /* 5. 手機版特效：滑到才變色 */
     .in-view {
         filter: grayscale(0%) !important;
         transform: scale(1.05) !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* 加點陰影更立體 */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 }
