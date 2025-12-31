@@ -120,43 +120,53 @@ footer { padding: 50px; text-align: center; background-color: #000; color: #fff;
 /* =========================================
    📱 手機版專用設定 (Mobile)
    ========================================= */
+/* =========================================
+   📱 手機版專用設定 (Mobile) - 最終優化版
+   ========================================= */
 @media (max-width: 768px) {
     
-    /* 1. 導覽列：改為相對定位 (Relative) */
+    /* 1. 導覽列：相對定位，不擋內容 */
     nav {
-        /* ✅ 關鍵修正：relative 會佔據空間，把 Hero 往下推，絕不重疊！ */
         position: relative !important; 
         flex-direction: column;
         padding: 20px 0;
         background-color: #ffffff !important;
         box-shadow: none;
         width: 100%;
-        top: auto; 
-        left: auto;
+        top: auto; left: auto;
     }
-
     nav ul { margin-top: 15px; gap: 20px; }
 
     /* 2. 排版修正 */
     header#hero h1 { font-size: 2rem; padding: 0 10px; }
     .about-container { flex-direction: column !important; padding: 0 20px; gap: 30px; }
     .about-text { text-align: left; width: 100%; }
-    .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; }
-
-    /* 3. ✅ 手機版捲動特效 (Scroll Trigger Effect) */
-    /* 當 JS 加上 .in-view 時，這些樣式會生效 */
-    .in-view {
-        filter: grayscale(0%) !important;  /* 變彩色 */
-        transform: scale(1.05) !important; /* 放大 */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* 加陰影 */
-        z-index: 10;
-    }
     
-    /* 確保初始狀態是黑白且未放大 */
-    .about-image video,
+    /* ✅ 修改點 A：Gallery 手機排版與間距 */
+    .gallery-grid { 
+        grid-template-columns: 1fr; /* 單欄 */
+        padding: 0 20px;
+        gap: 40px; /* <--- 這裡！加大間距，讓照片之間呼吸 */
+    }
+
+    /* 3. ✅ 手機版捲動特效 (Scroll Trigger Effect) - 強制執行版 */
+    
+    /* 定義所有會動的元素在手機上的初始狀態 */
+    .about-image video, /* 包含 Profile Video */
     .gallery-grid video,
     .gallery-grid img {
-        filter: grayscale(100%);
-        transform: scale(1);
+        filter: grayscale(100%); /* 預設黑白 */
+        transform: scale(1);     /* 預設原始大小 */
+        transition: all 0.8s ease; /* 設定動畫時間，慢一點比較有質感 */
+        box-shadow: none;
+    }
+
+    /* 當 JS 加上 .in-view 時，強制觸發特效 */
+    /* 使用更精準的選擇器，確保 Profile Video 一定會動 */
+    video.smart-video.in-view,
+    .gallery-grid img.in-view {
+        filter: grayscale(0%) !important;  /* 變彩色 */
+        transform: scale(1.05) !important; /* 放大 */
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3); /* 加強陰影，更立體 */
     }
 }
