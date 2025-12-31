@@ -69,48 +69,51 @@
         <p>© 2025 Jacky05</p>
     </footer>
 
-   <script>
+    <script>
         /* =========================================
-           功能一：原本的滑鼠移入播放功能 (保留不動)
-           ========================================= */
+        新版邏輯：區分電腦與手機的播放行為
+        ========================================= */
+        
+        // 1. 抓出所有貼有 "smart-video" 標籤的影片
         const videos = document.querySelectorAll('.smart-video');
+
+        // 2. 判斷現在是不是手機 (螢幕寬度小於 768px)
+        const isMobile = window.innerWidth < 768;
+
         videos.forEach(video => {
-            video.addEventListener('mouseenter', () => {
-                video.play();
-            });
-            video.addEventListener('mouseleave', () => {
-                video.pause();
-            });
+            if (isMobile) {
+                // ---【手機版邏輯】---
+                // 直接播放，不用等
+                video.play().catch(error => {
+                    // 某些手機如果開了省電模式，可能會擋自動播放，這裡防止報錯
+                    console.log("Auto-play was prevented by browser");
+                });
+
+            } else {
+                // ---【電腦版邏輯】---
+                // 保持原本的互動：移入播放，移出暫停
+                video.addEventListener('mouseenter', () => {
+                    video.play();
+                });
+
+                video.addEventListener('mouseleave', () => {
+                    video.pause();
+                    // video.currentTime = 0; // 如果想要移開後重頭播，可以把這行打開
+                });
+            }
         });
 
         /* =========================================
-           功能二：新增的 Hero 捲動淡出效果
-           ========================================= */
-        // 1. 抓到 Hero 區塊
+        Hero 區塊捲動淡出效果 (保留不動)
+        ========================================= */
         const heroSection = document.getElementById('hero');
-
-        // 2. 監聽視窗的「捲動 (scroll)」事件
         window.addEventListener('scroll', function() {
-            
-            // 取得目前視窗往下捲了多少距離
             const scrollPosition = window.scrollY;
-            
-            // 取得 Hero 區塊的總高度
             const heroHeight = heroSection.offsetHeight;
-
-            // 3. 計算透明度 (公式：1 減去 已捲動的比例)
-            // 捲得越多，數值越小 (從 1 變成 0)
             let opacityValue = 1 - (scrollPosition / heroHeight);
-
-            // 為了保險起見，確保透明度不會小於 0 (完全透明)
-            if (opacityValue < 0) {
-                opacityValue = 0;
-            }
-
-            // 4. 把計算出來的透明度套用到 Hero 區塊上
+            if (opacityValue < 0) opacityValue = 0;
             heroSection.style.opacity = opacityValue;
         });
     </script>
-</body>
 </body>
 </html>

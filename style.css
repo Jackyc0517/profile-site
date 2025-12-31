@@ -185,10 +185,6 @@ footer {
 }
 
 /* =========================================
-   手機版專用設定 (Mobile Styles)
-   當螢幕寬度小於 768px (平板/手機) 時觸發
-   ========================================= */
-/* =========================================
    手機版專用修復 (Mobile Fix)
    ========================================= */
 @media (max-width: 768px) {
@@ -240,5 +236,13 @@ footer {
     /* 5. 隱藏 Hero 區塊的視差滾動 (手機上這特效常會有 bug) */
     header#hero {
         background-attachment: scroll; 
+    }
+    /* ... 放在 @media (max-width: 768px) 的大括號裡面 ... */
+
+    /* 6. 手機版影片強制彩色 */
+    .about-image video, 
+    .gallery-grid video {
+        filter: grayscale(0%) !important; /* 強制移除黑白濾鏡 */
+        transform: scale(1) !important;   /* 手機上不要放大，維持原狀比較整齊 */
     }
 }
